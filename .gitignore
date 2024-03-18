@@ -1,0 +1,9 @@
+# macos stuff
+.DS_Store
+
+# r stuff
+.Rhistory
+
+# images and local copy
+app.R
+rsconnect/

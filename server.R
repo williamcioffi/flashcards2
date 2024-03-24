@@ -3,7 +3,7 @@ library(shiny)
 # load files
 key <- read.table("imagekey.csv", header = TRUE, sep = ',', stringsAsFactors = FALSE)
 imagepaths <- file.path("images", key$filename)
-nimages <- length(imagepaths)
+nimages <- nrow(key)
 curimage <- 1
 oo <- 1:nimages
 revealed <- FALSE

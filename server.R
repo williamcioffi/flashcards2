@@ -9,6 +9,24 @@ oo <- 1:nimages
 revealed <- FALSE
 
 server <- function(input, output, session) {
+  output$search <- renderUI(selectInput(
+    "id_select",
+    "search id",
+    choices = key$label,
+    multiple = TRUE
+  ))
+  
+  observeEvent(input$id_select, {
+    if(!is.null(input$id_select)) {
+      oo <<- grep(paste(input$id_select, collapse = "|"), key$label)
+      curimage <<- 1
+      revealed <<- FALSE
+    } else {
+      oo <<- 1:nimages
+      curimage <<- 1
+      revealed <<- FALSE
+    }
+  }, ignoreNULL = FALSE)
   
   reveal <- function() {
     revealed <<- TRUE
@@ -17,19 +35,23 @@ server <- function(input, output, session) {
   prv <- function() {
     revealed <<- FALSE
     curimage <<- curimage - 1
-    if(curimage == 0) curimage <<- nimages
+    if(curimage == 0) curimage <<- length(oo)
   }
   
   nxt <- function() {
     revealed <<- FALSE
     curimage <<- curimage + 1
-    if(curimage > nimages) curimage <<- 1
+    if(curimage > length(oo)) curimage <<- 1
   }
   
   shuffle <- function() {
     revealed <<- FALSE
     oo <<- sample(1:nimages, nimages)
     curimage <<- 1
+    updateSelectInput(session, "id_select",
+      choices = ids_list,
+      selected = NULL
+    )
   }
   
   observeEvent(input$reveal, {
@@ -62,12 +84,12 @@ server <- function(input, output, session) {
   
   output$picture <- bindEvent({
     renderText({
-      out <- paste0("<p>", curimage, "/", nimages, "</p>")
-      out <- paste0(out, "<br><img src=\"", imagepaths[oo[curimage]], "\" height = \"400\">")
+      out <- paste0("<p>", curimage, "/", length(oo), "</p>")
+      out <- paste0(out, "<br><img src=\"", imagepaths[oo[curimage]], "\" width = 100%>")
       if(revealed) {
         out <- paste0(out, "<br><p>", key$label[oo[curimage]], "</p>")
       }
       
       out
-    })}, input$nxt, input$shuffle, input$prv, input$reveal, input$keys) 
+    })}, input$nxt, input$shuffle, input$prv, input$reveal, input$keys, input$id_select) 
 }

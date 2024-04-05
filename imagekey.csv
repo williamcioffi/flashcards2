@@ -1,4 +1,4 @@
-filename,label
-1.png,51_A
-2.png,07_B
-3.png,41_C
+filename,label,info1,info2,info3,info4,info5
+1.png,51_Z<br>A1<br>B2<br>C10<br>,51_Z,A1,B2,C10,
+2.png,07_F<br><br><br>C5<br>D1,07_F,,,C5,D1
+3.png,41_G<br>A3<br><br>C6; C7<br>,41_G,A3,,C6; C7,
